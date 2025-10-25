@@ -7,3 +7,14 @@ def test_criacao_paciente_valido():
     assert p.cpf == "12345678901"
     assert p.ativo is True
 
+def test_cpf_invalido():
+    with pytest.raises(ValueError):
+        Paciente("João", "123456")
+
+def test_cpf_com_letras():
+    with pytest.raises(ValueError):
+        Paciente("João", "123abc45678")
+
+def test_cpf_vazio():
+    with pytest.raises(ValueError):
+        Paciente("João", "")
