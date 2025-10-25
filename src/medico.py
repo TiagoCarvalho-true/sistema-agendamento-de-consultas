@@ -3,10 +3,17 @@ from datetime import datetime
 
 class Medico:
     """Representa um médico e sua agenda de horários."""
-    def __init__(self, nome: str, especialidade: str):
+    def __init__(self, nome: str, especialidade: str, agenda=None):
         self.nome = nome
         self.especialidade = especialidade
-        self.agenda: list[datetime] = []
+        if agenda is None:
+            self.agenda = []
+        elif isinstance(agenda, str):
+            self.agenda = [agenda]
+        elif isinstance(agenda, list):
+            self.agenda = agenda.copy()
+        else:
+            raise TypeError("agenda deve ser str, list ou None")
 
     def _parse_horario(self, horario: str) -> datetime:
         """Converte a string de horário para um objeto datetime."""
@@ -15,21 +22,17 @@ class Medico:
         except ValueError as e:
             raise ValueError("Formato de horário inválido. Use 'DD/MM/YYYY HH:MM'.") from e
 
-    def adicionar_horario(self, horario: str):
+    def agendar(self, horario: str):
         """Adiciona um horário à agenda."""
-        horario_dt = self._parse_horario(horario)
-        if horario_dt in self.agenda:
-            raise ValueError("Horário já cadastrado.")
+        if horario in self.agenda:
+            raise ValueError("Horário já agendado.")
+        self.agenda.append(horario)
 
-        self.agenda.append(horario_dt)
-        self.agenda.sort()
-
-    def remover_horario(self, horario: str):
+    def cancelar(self, horario: str):
         """Remove um horário da agenda."""
-        horario_dt = self._parse_horario(horario)
-        if horario_dt not in self.agenda:
+        if horario not in self.agenda:
             raise ValueError("Horário não encontrado.")
-        self.agenda.remove(horario_dt)
+        self.agenda.remove(horario)
 
     def disponivel(self, horario: str) -> bool:
         """Retorna True se o horário estiver disponível."""
