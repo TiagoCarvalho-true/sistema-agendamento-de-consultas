@@ -6,3 +6,4 @@ def test_criacao_paciente_valido():
     assert p.nome == "Maria"
     assert p.cpf == "12345678901"
     assert p.ativo is True
+
